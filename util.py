@@ -77,9 +77,6 @@ def load_data(dataset, degree_as_tag):
                 node_features = None
                 node_feature_flag = False
 
-            #assert len(g.edges()) * 2 == n_edges  (some graphs in COLLAB have self-loops, ignored here)
-            #print(len(g))
-            #print(n)
             assert len(g) == n
 
             g_list.append(S2VGraph(g, l, node_tags))
@@ -124,16 +121,7 @@ def load_data(dataset, degree_as_tag):
     print('# classes: %d' % len(label_dict))
     print('# maximum node tag: %d' % len(tagset))
 
-    #split dataset into training and testing
-    #np.random.seed(seed)
-    #perm = np.random.permutation(len(g_list))
-    #num_train = int((1 - test_proportion) * len(g_list))
-
-    #train_graph_list = [g_list[i] for i in perm[:num_train]]
-    #test_graph_list = [g_list[i] for i in perm[num_train:]] 
-
     print("# data: %d" % len(g_list))
-    #print("# test data: %d" % len(test_graph_list))
 
     return g_list, len(label_dict)
 
@@ -152,44 +140,4 @@ def separate_data(graph_list, seed, fold_idx):
 
     return train_graph_list, test_graph_list
 
-def separate_data_val(graph_list, seed, fold_idx):
-    assert 0 <= fold_idx and fold_idx < 10, "fold_idx must be from 0 to 9."
-    skf = StratifiedKFold(n_splits=10, shuffle = True, random_state = seed)
-
-    labels = [graph.label for graph in graph_list]
-    idx_list = []
-    for idx in skf.split(np.zeros(len(labels)), labels):
-        idx_list.append(idx[1])
-    
-
-    train_idx = []
-    for i in range(10):
-        if i == fold_idx:
-            test_idx = idx_list[i] 
-        elif i == (fold_idx+1) % 10:
-            val_idx = idx_list[i]
-        else:
-            train_idx.extend(idx_list[i])
-
-    train_graph_list = [graph_list[i] for i in train_idx]
-    test_graph_list = [graph_list[i] for i in test_idx]
-    val_graph_list = [graph_list[i] for i in val_idx]
-
-    return train_graph_list, test_graph_list, val_graph_list
-
-if __name__ == "__main__":
-
-    dataset_list = ["MUTAG", "NCI1", "NCI109", "PROTEINS", "PTC", "IMDBBINARY", "IMDBMULTI", "COLLAB", "REDDITBINARY", "REDDITMULTI5K"]
-    g_list, num_class = load_data("MUTAG", False)
-
-    class_label = [g.label for g in g_list]
-    from collections import Counter
-    cnt = Counter(class_label)
-    print(cnt)
-
-    for dataset in dataset_list:
-        print(dataset)
-        g_list, num_class = load_data(dataset, False)
-        separate_data_val(g_list, 0, 9)
-        print("")
 
