@@ -48,3 +48,26 @@ python main.py --help
 
 to learn hyper-parameters to be specified.
 
+## Create custom dataset
+If you have a set of labeled graphs you can transform it into a single .txt file which then can be fed to the network. Structure of the .txt is following:
+- each graph is a block
+- first line of a block consist of *%number of nodes%* *%class label%*
+- each following line describes single node in a way: *%node label%* *%number of connected nodes%* *%connected node #1%* *%connected node #2%* *%connected node #3%*...
+- row number correspond to the node's index, starting from 0
+- test/train partition is defined by cross-validation and doesn't appear in .txt
+
+For example:
+```
+10 7
+0 3 1 2 9
+0 3 0 2 9
+0 4 0 1 3 9
+0 3 2 4 5
+0 3 3 5 6
+0 5 3 4 6 7 8
+0 4 4 5 7 8
+0 3 5 6 8
+0 3 5 6 7
+1 3 0 1 2
+```
+The block corespond to graph which consist of 10 nodes and belongs to class 7. First (0) node has label 0 and has 3 neighbours; these neighbours are nodes 1, 2, and 9. The same can be applied to the next nodes.
