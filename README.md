@@ -48,3 +48,6 @@ python main.py --help
 
 to learn hyper-parameters to be specified.
 
+## Cross-validation strategy in the paper
+The cross-validation in our paper only uses training and validation sets (no test set) due to small dataset size. Specifically, after obtaining 10 validation curves corresponding to 10 folds, we first took average of validation curves across the 10 folds (thus, we obtain an averaged validation curve), and then selected a single epoch that achieved the maximum averaged validation accuracy. Finally, the standard devision over the 10 folds was computed at the selected epoch. 
+
