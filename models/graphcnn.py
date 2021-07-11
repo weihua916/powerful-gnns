@@ -16,8 +16,8 @@ class GraphCNN(nn.Module):
             output_dim: number of classes for prediction
             final_dropout: dropout ratio on the final linear layer
             learn_eps: If True, learn epsilon to distinguish center nodes from neighboring nodes. If False, aggregate neighbors and center nodes altogether. 
-            neighbor_pooling_type: how to aggregate neighbors (mean, average, or max)
-            graph_pooling_type: how to aggregate entire nodes in a graph (mean, average)
+            neighbor_pooling_type: how to aggregate neighbors (sum, average, or max)
+            graph_pooling_type: how to aggregate entire nodes in a graph (sum, average)
             device: which device to use
         '''
 
